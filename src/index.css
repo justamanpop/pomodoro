@@ -7,7 +7,79 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body > #root {
+    display: grid;
+    grid-template-rows: 3.4em 17em 20em;
+}
+
+.timerIcon {
+    height: 1.5em;
+    width: 1.5em;
+    align-self: center;
+    margin-left: 0.5em;
+}
+
+.navBarText {
+    grid-column-start: 2;
+    font-size: 1.5em;
+    align-self: center;
+    justify-self: center;
+}
+
+.navBar {
+    display: grid;
+    grid-template-columns: 40em 15em;
+    background-color: greenyellow;
+    height: 3.5em;
+}
+
+.timerForm {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    margin-top: 6em;
+}
+
+.timerForm > form {
+    padding: 1em;
+    box-shadow: 0 0 0.5px 0.5px grey;
+}
+
+.main {
+    display: grid;
+    grid-template-rows: 1.2em 11em 6em;
+}
+
+.totalTime {
+    justify-self: center;
+    color: rgb(84, 89, 94);
+    margin-top: 1em;
+    font-size: 1.5em;
+}
+
+.timerContainer {
+    justify-self: center;
+    font-size:8em;
+    font-weight: bold;
+}
+
+.timerButtonsContainer {
+    align-self: center;
+    justify-self: center;
+}
+
+.startButton {
+    background-color: green;
+    margin: 0.5em;
+    box-shadow: 0.2em;
+    border-radius: 0.5em;
+    width: 7.5em;
+}
+
+.resetButton {
+    background-color: red;
+    margin: 0.5em;
+    box-shadow: 0.2em;
+    border-radius: 0.5em;
+    width: 7.5em;
 }
