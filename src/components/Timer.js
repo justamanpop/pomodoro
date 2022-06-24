@@ -1,20 +1,33 @@
 import React, { useState, useReducer, useEffect } from "react";
 import TimerStates from "../TimerStates";
-import TotalTime from "./TotalTime";
 
-function Timer({ timerMinutes = 25, timerSeconds = 0 }) {
+function Timer({ timerMinutes = 25, timerSeconds = 0, toggle, heading }) {
 	const [minutes, setMinutes] = useState(timerMinutes);
 	const [seconds, setSeconds] = useState(timerSeconds);
 	const [startButtonText, setStartButtonText] = useState("Start");
 
-	function myEffect() {
+	function setTimerEffect() {
 		let timer = setInterval(updateTime, 1000);
 		return () => {
 			clearInterval(timer);
 		};
 	}
 
-	useEffect(myEffect);
+	function toggleTimerState() {
+		if (state === TimerStates.Finished) {
+			toggle();
+		}
+	}
+
+	// useEffect(() => {
+	// console.log("initializing minutes, seconds and button text useEffect called")
+	// 	setMinutes(timerMinutes);
+	// 	setSeconds(timerSeconds);
+	// 	setStartButtonText("Start");
+	// }, [timerMinutes, timerSeconds]);
+
+	useEffect(setTimerEffect);
+	useEffect(toggleTimerState);
 
 	function stateReducer(state, action) {
 		if (action === TimerStates.Initial) {
@@ -66,7 +79,7 @@ function Timer({ timerMinutes = 25, timerSeconds = 0 }) {
 
 	return (
 		<div className="main">
-			<TotalTime minutes={timerMinutes} seconds={timerSeconds} />
+			{<span className="timerHeading">{heading}</span>}
 			<div className="timerContainer">
 				{minutes.toLocaleString("en-US", {
 					minimumIntegerDigits: 2,

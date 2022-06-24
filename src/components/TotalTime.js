@@ -1,6 +1,6 @@
-const TotalTime = ({ minutes, seconds }) => {
+const TotalTime = ({ minutes, seconds, active }) => {
 	return (
-		<span className="totalTime">
+		<span className={"totalTime" + (active ? " activeTimer" : "")}>
 			{minutes.toLocaleString("en-US", {
 				minimumIntegerDigits: 2,
 				useGrouping: false,

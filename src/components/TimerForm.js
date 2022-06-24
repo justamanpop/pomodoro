@@ -1,17 +1,37 @@
 import { Formik, Field, Form } from "formik";
 
-const TimerForm = ({ setMinutes, setSeconds }) => {
+const TimerForm = ({ setMinutes, setSeconds, prefix, autoFocus }) => {
 	return (
 		<div className="timerForm">
 			<Formik
-				initialValues={{ seconds: "", minutes: "" }}
+				initialValues={{
+					seconds: "",
+					minutes: "",
+				}}
 				validate={(values) => {
 					const errors = {};
 
-					if (values.seconds && values.seconds > 59) {
+					if (values.seconds && parseInt(values.seconds) > 59) {
 						errors.seconds = "Value must be less than 60";
 					}
 
+					let minutesAre0 = parseInt(values.minutes) === 0;
+					let secondsAre0 = parseInt(values.seconds) === 0;
+
+					let minutesAreEmpty = !values.minutes;
+					let secondsAreEmpty = !values.seconds;
+
+					if (minutesAre0 && secondsAre0) {
+						errors.all = "Both seconds and minutes cannot be 0";
+					} else if (minutesAreEmpty && secondsAreEmpty) {
+						errors.all = "Both seconds and minutes cannot be empty";
+					} else if (
+						(minutesAre0 || minutesAreEmpty) &&
+						(secondsAre0 || secondsAreEmpty)
+					) {
+						errors.all =
+							"Both seconds and minutes cannot be empty or 0";
+					}
 					return errors;
 				}}
 				validateOnChange={false}
@@ -23,13 +43,15 @@ const TimerForm = ({ setMinutes, setSeconds }) => {
 					if (!values.seconds) setSeconds(0);
 					else setSeconds(parseInt(values.seconds));
 
+					values.seconds = "";
+					values.minutes = "";
 					setSubmitting(false);
 				}}
 			>
 				{({ values, errors, handleSubmit, isSubmitting }) => (
 					<Form onSubmit={handleSubmit}>
 						<div className="form-group">
-							<label htmlFor="minutes">Minutes</label>
+							<label htmlFor="minutes">{prefix} Minutes</label>
 							<Field
 								name="minutes"
 								id="minutes"
@@ -39,7 +61,7 @@ const TimerForm = ({ setMinutes, setSeconds }) => {
 										event.preventDefault();
 									}
 								}}
-								autoFocus
+								autoFocus={autoFocus}
 							/>
 							<span style={{ color: "red", fontSize: "small" }}>
 								{errors.minutes}
@@ -47,7 +69,7 @@ const TimerForm = ({ setMinutes, setSeconds }) => {
 						</div>
 
 						<div className="form-group">
-							<label htmlFor="seconds">Seconds</label>
+							<label htmlFor="seconds">{prefix} Seconds</label>
 							<Field
 								name="seconds"
 								id="seconds"
@@ -61,13 +83,17 @@ const TimerForm = ({ setMinutes, setSeconds }) => {
 							<span style={{ color: "red", fontSize: "small" }}>
 								{errors.seconds}
 							</span>
+							<span style={{ color: "red", fontSize: "small" }}>
+								{errors.all}
+							</span>
 						</div>
+
 						<button
 							type="submit"
 							className="btn btn-primary"
 							style={{ marginRight: "1em", width: "6em" }}
 						>
-							Set Timer
+							Update
 						</button>
 						<button
 							type="reset"
