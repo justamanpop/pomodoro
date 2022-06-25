@@ -74,14 +74,23 @@ body > #root {
 
 .main {
     display: grid;
-    grid-template-rows: 2em 10em 6em;
+    grid-template-rows: 3em 10em 6em;
+}
+
+.timerHeader {
+    justify-self: center;
+    display: grid;
+    grid-template-columns: repeat(8,1fr);
 }
 
 .timerHeading {
-    justify-self: center;
     color: rgb(84, 89, 94);
-    margin-top: 1em;
     font-size: 1.6em;
+    align-self: flex-end;
+    justify-self: center;
+    margin-left: 2.25em;
+    grid-column-start: 4;
+    padding: 0;
 }
 
 .timerContainer {
@@ -109,4 +118,15 @@ body > #root {
     box-shadow: 0.2em;
     border-radius: 0.5em;
     width: 7.5em;
+}
+
+.toggleTimerButton {
+    justify-self: center;
+    align-self: flex-end;
+    padding-top: 0;
+    height: 1.6em;
+    width: 10em;
+    font-size: 0.75em;
+    margin-bottom: 0.5em;
+    margin-left: 0.5em;
 }

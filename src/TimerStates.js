@@ -1,8 +1,6 @@
 const TimerStates = {
-	Initial: 1,
-	Running: 2,
-	Paused: 3,
-	Finished: 4,
+	Running: 1,
+	Paused: 2,
 };
 
 export default TimerStates;

@@ -12,9 +12,14 @@ function App() {
 	const [breakMinutes, setBreakMinutes] = useState(5);
 	const [breakSeconds, setBreakSeconds] = useState(0);
 
+	//boolean to check wether we are in work timer or break timer
 	const [isWork, setIsWork] = useState(true);
 
+	//boolean to check if it's the very first render, and will not autostart timer if true
+	const [isFirstRender, setIsFirstRender] = useState(true);
+
 	const toggle = () => {
+		setIsFirstRender(false);
 		setIsWork(!isWork);
 	};
 
@@ -25,16 +30,18 @@ function App() {
 				<Timer
 					timerMinutes={workMinutes}
 					timerSeconds={workSeconds}
-					key={workMinutes + ":" + workSeconds}
+					key={"Work " + workMinutes + ":" + workSeconds}
 					toggle={toggle}
+					isFirstRender={isFirstRender}
 					heading="Work"
 				/>
 			) : (
 				<Timer
 					timerMinutes={breakMinutes}
 					timerSeconds={breakSeconds}
-					key={breakMinutes + ":" + breakSeconds}
+					key={"Break " + breakMinutes + ":" + breakSeconds}
 					toggle={toggle}
+					isFirstRender={isFirstRender}
 					heading="Break"
 				/>
 			)}
@@ -51,6 +58,7 @@ function App() {
 						setSeconds={setWorkSeconds}
 						prefix="Work Timer"
 						autoFocus={true}
+						setIsFirstRender={setIsFirstRender}
 					/>
 				</div>
 				<div className="timerFormContainer2">
@@ -64,6 +72,7 @@ function App() {
 						setSeconds={setBreakSeconds}
 						prefix="Break Timer"
 						autoFocus={false}
+						setIsFirstRender={setIsFirstRender}
 					/>
 				</div>
 			</div>

@@ -1,6 +1,12 @@
 import { Formik, Field, Form } from "formik";
 
-const TimerForm = ({ setMinutes, setSeconds, prefix, autoFocus }) => {
+const TimerForm = ({
+	setMinutes,
+	setSeconds,
+	prefix,
+	autoFocus,
+	setIsFirstRender,
+}) => {
 	return (
 		<div className="timerForm">
 			<Formik
@@ -37,6 +43,7 @@ const TimerForm = ({ setMinutes, setSeconds, prefix, autoFocus }) => {
 				validateOnChange={false}
 				validateOnBlur={false}
 				onSubmit={(values, { setSubmitting }) => {
+					setIsFirstRender(true);
 					if (!values.minutes) setMinutes(0);
 					else setMinutes(parseInt(values.minutes));
 
@@ -45,6 +52,7 @@ const TimerForm = ({ setMinutes, setSeconds, prefix, autoFocus }) => {
 
 					values.seconds = "";
 					values.minutes = "";
+
 					setSubmitting(false);
 				}}
 			>

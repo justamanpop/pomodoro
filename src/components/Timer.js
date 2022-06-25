@@ -1,10 +1,15 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import TimerStates from "../TimerStates";
 
-function Timer({ timerMinutes = 25, timerSeconds = 0, toggle, heading }) {
+function Timer({
+	timerMinutes = 25,
+	timerSeconds = 0,
+	toggle,
+	isFirstRender,
+	heading,
+}) {
 	const [minutes, setMinutes] = useState(timerMinutes);
 	const [seconds, setSeconds] = useState(timerSeconds);
-	const [startButtonText, setStartButtonText] = useState("Start");
 
 	function setTimerEffect() {
 		let timer = setInterval(updateTime, 1000);
@@ -13,57 +18,33 @@ function Timer({ timerMinutes = 25, timerSeconds = 0, toggle, heading }) {
 		};
 	}
 
-	function toggleTimerState() {
-		if (state === TimerStates.Finished) {
-			toggle();
-		}
-	}
-
-	// useEffect(() => {
-	// console.log("initializing minutes, seconds and button text useEffect called")
-	// 	setMinutes(timerMinutes);
-	// 	setSeconds(timerSeconds);
-	// 	setStartButtonText("Start");
-	// }, [timerMinutes, timerSeconds]);
+	useEffect(() => {
+		setMinutes(timerMinutes);
+		setSeconds(timerSeconds);
+	}, [timerMinutes, timerSeconds]);
 
 	useEffect(setTimerEffect);
-	useEffect(toggleTimerState);
 
-	function stateReducer(state, action) {
-		if (action === TimerStates.Initial) {
-			setMinutes(timerMinutes);
-			setSeconds(timerSeconds);
-			setStartButtonText("Start");
-		} else if (action === TimerStates.Paused) {
-			setStartButtonText("Start");
-		} else if (action === TimerStates.Running) {
-			setStartButtonText("Pause");
-		}
-
-		return action;
-	}
-
-	const [state, dispatch] = useReducer(stateReducer, TimerStates.Initial);
+	const [state, setState] = useState(
+		isFirstRender ? TimerStates.Paused : TimerStates.Running
+	);
 
 	function startOnClick() {
-		if (state === TimerStates.Initial || state === TimerStates.Paused) {
-			dispatch(TimerStates.Running);
+		if (state === TimerStates.Paused) {
+			setState(TimerStates.Running);
 		} else {
-			dispatch(TimerStates.Paused);
+			setState(TimerStates.Paused);
 		}
 	}
 
 	function resetOnClick() {
-		dispatch(TimerStates.Initial);
+		setMinutes(timerMinutes);
+		setSeconds(timerSeconds);
+		setState(TimerStates.Paused);
 	}
 
 	function updateTime() {
-		if (
-			state === TimerStates.Initial ||
-			state === TimerStates.Paused ||
-			state === TimerStates.Finished
-		)
-			return;
+		if (state === TimerStates.Paused) return;
 
 		if (seconds !== 0) {
 			setSeconds(seconds - 1);
@@ -72,14 +53,22 @@ function Timer({ timerMinutes = 25, timerSeconds = 0, toggle, heading }) {
 				setMinutes(minutes - 1);
 				setSeconds(59);
 			} else {
-				dispatch(TimerStates.Finished);
+				toggle();
 			}
 		}
 	}
 
 	return (
 		<div className="main">
-			{<span className="timerHeading">{heading}</span>}
+			<div className="timerHeader">
+				{<span className="timerHeading">{heading}</span>}
+				<button
+					className="btn btn-primary toggleTimerButton"
+					onClick={toggle}
+				>
+					End {heading} Timer
+				</button>
+			</div>
 			<div className="timerContainer">
 				{minutes.toLocaleString("en-US", {
 					minimumIntegerDigits: 2,
@@ -100,7 +89,7 @@ function Timer({ timerMinutes = 25, timerSeconds = 0, toggle, heading }) {
 						(minutes === 0 && seconds === 0)
 					}
 				>
-					{startButtonText}
+					{state === TimerStates.Paused ? "Continue" : "Pause"}
 				</button>
 				<button
 					className="btn btn-lg resetButton"
