@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/App.css";
+import NotificationModal from "./NotificationModal";
 import NavBar from "./NavBar";
 import Timer from "./Timer";
 import TimerForm from "./TimerForm";
@@ -25,6 +26,7 @@ function App() {
 
 	return (
 		<>
+			<NotificationModal />
 			<NavBar />
 			{isWork ? (
 				<Timer

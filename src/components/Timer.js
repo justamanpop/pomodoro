@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import TimerStates from "../TimerStates";
 
+import swap from "../swap.png";
+import notificationSound from "../Notification.wav";
+
 function Timer({
 	timerMinutes = 25,
 	timerSeconds = 0,
@@ -53,6 +56,23 @@ function Timer({
 				setMinutes(minutes - 1);
 				setSeconds(59);
 			} else {
+				if (Notification.permission === "default")
+					console.log("User hasn't said yea or nay.");
+				else if (Notification.permission === "denied")
+					console.log("User says nay");
+				else if (Notification.permission === "granted") {
+					const text = `${heading} timer is up. Starting ${
+						heading === "Work" ? "Break" : "Work"
+					}`;
+
+					new Notification("Time up!", {
+						body: text,
+						icon: swap,
+					});
+
+					const audio = new Audio(notificationSound);
+					audio.play();
+				}
 				toggle();
 			}
 		}
@@ -89,7 +109,7 @@ function Timer({
 						(minutes === 0 && seconds === 0)
 					}
 				>
-					{state === TimerStates.Paused ? "Continue" : "Pause"}
+					{state === TimerStates.Paused ? "Start" : "Pause"}
 				</button>
 				<button
 					className="btn btn-lg resetButton"
